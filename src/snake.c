@@ -4,28 +4,29 @@
 #include <conio.h>
 #include <time.h>
 
-#define WIDTH           30
-#define HEIGHT          15
+#define WIDTH           30          //The width of map
+#define HEIGHT          15          //The height of map
 
-#define WINMAXLENGTH    8
+#define WINMAXLENGTH    15          //The snake max length while you win
 
 #define UP              -1,0
 #define DOWN            1,0
 #define LEFT            0,-1
 #define RIGHT           0,1
 
-char map[HEIGHT][WIDTH+1];
+char map[HEIGHT][WIDTH+1];          //The map array
 
-int currentLength = 5;
-int snakeX[WINMAXLENGTH] = { 0, 0, 0, 0, 0 };
-int snakeY[WINMAXLENGTH] = { 0, 1, 2, 3, 4 };
-char currentMoveDirection = 'D';       //'W':UP  'S':DOWN  'A':LEFT  'D':RIGHT
+int currentLength = 5;              //The current length of the snake
+int snakeX[WINMAXLENGTH] = { 0, 0, 0, 0, 0 };       //The snake x coordinate value
+int snakeY[WINMAXLENGTH] = { 0, 1, 2, 3, 4 };       //The snake y coordinate value
+char currentMoveDirection = 'D';    //'W':UP  'S':DOWN  'A':LEFT  'D':RIGHT
 
-int foodX = 7;
-int foodY = 15;
+int foodX = 7;                      //The food x coordinate value
+int foodY = 15;                     //The food y coordinate value
 
-int gameOver = 0;
+int gameOver = 0;                   //The condition of game over.
 
+//Generate food random position.
 void generateFood()
 {
     srand((unsigned)time(NULL));
@@ -33,6 +34,7 @@ void generateFood()
     foodY = rand()%WIDTH;
 }
 
+//Initialization the map
 void initMap()
 {
     int i,j;
@@ -40,11 +42,12 @@ void initMap()
         for(j=0;j<WIDTH;j++)
             map[i][j] = ' ';
     map[0][0] = map[0][1] =
-    map[0][2] = map[0][3] = 'X';
-    map[0][4] = 'H';
-    map[foodX][foodY] = '$';
+    map[0][2] = map[0][3] = 'X';    //The snake body: 'X'
+    map[0][4] = 'H';                //The snake head: 'H'
+    map[foodX][foodY] = '$';        //The food: '$'
 }
 
+//print the map
 void printMap()
 {
     int i,j;
@@ -59,6 +62,7 @@ void printMap()
     for(i=0;i<WIDTH+2;i++)   printf("*");    printf("\n");
 }
 
+//The snake can eat food
 void eatFood()
 {
     snakeX[currentLength] = foodX;
@@ -95,45 +99,51 @@ void canEatRightFood()
             eatFood();
 }
 
+//Control the snake's move
 void snakeMove(int dx, int dy)
 {
     int i,j;
+    //clear the map
     for(i=0;i<HEIGHT;i++)
         for(j=0;j<WIDTH;j++)
             map[i][j] = ' ';
+    //move the snake's body
     for(i=0;i<currentLength-1;i++)
     {
         snakeX[i] = snakeX[i+1];
         snakeY[i] = snakeY[i+1];
         map[snakeX[i]][snakeY[i]] = 'X';
     }
+    //move the snake's head
     snakeX[i] = snakeX[i] + dx;
     snakeY[i] = snakeY[i] + dy;
     map[snakeX[i]][snakeY[i]] = 'H';
     map[foodX][foodY] = '$';
 }
 
+//Judge the snake move path by the player's control
 void snakeMoveDirection(char direction)
 {
-    if(direction == 'W' && currentMoveDirection != 'S')
+    //the player press the 'W' or 'UP' while snake's move direction is not opposite
+    if((direction == 'W' || direction == 72) && currentMoveDirection != 'S')
     {
         canEatUpFood();
         currentMoveDirection = 'W';
         snakeMove(UP);
     }
-    else if(direction == 'S' && currentMoveDirection != 'W')
+    else if((direction == 'S' || direction == 80) && currentMoveDirection != 'W')
     {
         canEatDownFood();
         currentMoveDirection = 'S';
         snakeMove(DOWN);
     }
-    else if(direction == 'A' && currentMoveDirection != 'D')
+    else if((direction == 'A' || direction == 75) && currentMoveDirection != 'D')
     {
         canEatLeftFood();
         currentMoveDirection = 'A';
         snakeMove(LEFT);
     }
-    else if(direction == 'D' && currentMoveDirection != 'A')
+    else if((direction == 'D' || direction == 77) && currentMoveDirection != 'A')
     {
          canEatRightFood();
          currentMoveDirection = 'D';
@@ -145,11 +155,13 @@ void snakeMoveDirection(char direction)
     }
 }
 
+//Clear the window
 void refresh()
 {
     system("cls");
 }
 
+//Judge whether the game is over
 int isGameOver()
 {
     if(snakeX[currentLength-1] == HEIGHT || snakeX[currentLength-1] == -1 ||
@@ -169,6 +181,7 @@ int main()
     printMap();
     while(1)
     {
+        //get the keyboard input
         if(_kbhit())        snakeMoveDirection(_getch());
         else                snakeMoveDirection(currentMoveDirection);
         refresh();
