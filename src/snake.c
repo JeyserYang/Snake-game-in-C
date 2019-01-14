@@ -115,40 +115,72 @@ void snakeMove(int dx, int dy)
 
 void snakeMoveDirection(char direction)
 {
-    switch(direction)
+    if(direction == 'W' && currentMoveDirection != 'S')
     {
-        case 'W':       canEatUpFood();     currentMoveDirection = 'W';
-                        snakeMove(UP);      break;
-        case 'S':       canEatDownFood();   currentMoveDirection = 'S';
-                        snakeMove(DOWN);    break;
-        case 'A':       canEatLeftFood();   currentMoveDirection = 'A';
-                        snakeMove(LEFT);    break;
-        case 'D':       canEatRightFood();  currentMoveDirection = 'D';
-                        snakeMove(RIGHT);   break;
-        default:        snakeMoveDirection(currentMoveDirection);
+        canEatUpFood();
+        currentMoveDirection = 'W';
+        snakeMove(UP);
+    }
+    else if(direction == 'S' && currentMoveDirection != 'W')
+    {
+        canEatDownFood();
+        currentMoveDirection = 'S';
+        snakeMove(DOWN);
+    }
+    else if(direction == 'A' && currentMoveDirection != 'D')
+    {
+        canEatLeftFood();
+        currentMoveDirection = 'A';
+        snakeMove(LEFT);
+    }
+    else if(direction == 'D' && currentMoveDirection != 'A')
+    {
+         canEatRightFood();
+         currentMoveDirection = 'D';
+         snakeMove(RIGHT);
+    }
+    else
+    {
+        snakeMoveDirection(currentMoveDirection);
     }
 }
 
 void refresh()
 {
-    Sleep(200);
     system("cls");
+}
+
+int isGameOver()
+{
+    if(snakeX[currentLength-1] == HEIGHT || snakeX[currentLength-1] == -1 ||
+        snakeY[currentLength-1] == WIDTH  || snakeY[currentLength-1] == -1 )
+                return 1;
+    int i;
+    for(i=0;i<currentLength-1;i++)
+        if(snakeX[currentLength-1] == snakeX[i] &&
+           snakeY[currentLength-1] == snakeY[i])
+                return 1;
+    return 0;
 }
 
 int main()
 {
     initMap();
     printMap();
-    while(!gameOver)
+    while(1)
     {
         if(_kbhit())        snakeMoveDirection(_getch());
         else                snakeMoveDirection(currentMoveDirection);
-        if(currentLength == WINMAXLENGTH)
-            break;
         refresh();
         printMap();
+        if(isGameOver())                        break;
+        if(currentLength == WINMAXLENGTH)       break;
+        Sleep(200);
     }
-    printf("Congratulation!!! YOU WIN!!!\n");
+    if(isGameOver() == 0)
+        printf("Congratulation!!! YOU WIN!!!\n");
+    else
+        printf("HAHAHAHAHAHAHA!!! YOU LOSE!!!\n");
     system("pause");
     return 0;
 }
