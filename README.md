@@ -168,4 +168,4 @@ void eatFood() {
     generateFood();
 }
 ```
-**Note2**: 至此，贪吃蛇的基本功能就算全部实现了，接下来就是一些细节设计了，包括：难度选择，向左移动时按下向右键不会有反应，上下左右按键也可以控制蛇的移动，判断游戏结束条件，具体代码可参见[](https://github.com/JeyserYang/Snake-game-in-C/blob/v1.0/src/snake.c)
+**Note2**: 至此，贪吃蛇的基本功能就算全部实现了，接下来就是一些细节设计了，包括：难度选择，向左移动时按下向右键不会有反应，上下左右按键也可以控制蛇的移动，判断游戏结束条件，具体代码可参见[snake.c](https://github.com/JeyserYang/Snake-game-in-C/blob/v1.0/src/snake.c)
