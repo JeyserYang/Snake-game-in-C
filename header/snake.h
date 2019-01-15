@@ -1,8 +1,8 @@
 #ifndef SNAKE_H_INCLUDED
 #define SNAKE_H_INCLUDED
 
-#define WIDTH           42          //The width of map
-#define HEIGHT          21          //The height of map
+#define WIDTH           40          //The width of map
+#define HEIGHT          20          //The height of map
 
 #define WINMAXLENGTH    15          //The snake max length while you win
 
